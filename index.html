@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joaillerie Royale - Générateur de Colliers</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="background-globes">
+        <div class="globe"></div>
+        <div class="globe"></div>
+        <div class="globe"></div>
+    </div>
+
+    <main class="container">
+        <header>
+            <h1>L'Atelier du Joaillier</h1>
+            <p class="subtitle">Configuration des Colliers Royaux</p>
+        </header>
+
+        <section class="controls glass-panel">
+            <div class="input-group">
+                <label for="length-l">Longueur (l)</label>
+                <input type="number" id="length-l" min="1" max="20" value="5" placeholder="ex: 5">
+            </div>
+            <div class="input-group">
+                <label for="price-p">Prix Total (p)</label>
+                <input type="number" id="price-p" min="0" max="20" value="3" placeholder="ex: 3">
+            </div>
+            <div class="input-group">
+                <label for="max-zeros-m">Max Zéros (m)</label>
+                <input type="number" id="max-zeros-m" min="1" max="20" value="2" placeholder="ex: 2">
+            </div>
+            <button id="generate-btn" class="primary-btn">Forger les Colliers</button>
+        </section>
+
+        <section class="results-grid">
+            <div class="result-column glass-panel">
+                <h2>Colliers Binaires</h2>
+                <p class="meta">Perles {0, 1} • <span id="count-binary">0</span> résultats</p>
+                <div id="list-binary" class="necklace-list">
+                    <!-- Results populated by JS -->
+                </div>
+            </div>
+
+            <div class="result-column glass-panel">
+                <h2>Colliers Généraux</h2>
+                <p class="meta">Perles {0...p} • <span id="count-general">0</span> résultats</p>
+                <div id="list-general" class="necklace-list">
+                    <!-- Results populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <footer style="text-align: center; margin-top: 3rem; margin-bottom: 2rem;">
+            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                <a href="proof.html"
+                    style="color: var(--accent-color); text-decoration: none; font-size: 0.9rem; border-bottom: 1px dashed var(--accent-color);">Dénombrement
+                    des Colliers Binaires (lemme de Burnside)</a>
+                <a href="proof_elementary.html"
+                    style="color: var(--accent-color); text-decoration: none; font-size: 0.9rem; border-bottom: 1px dashed var(--accent-color);">Démonstration
+                    Élémentaire (sans Burnside)</a>
+                <a href="proof_elementary_general.html"
+                    style="color: var(--accent-color); text-decoration: none; font-size: 0.9rem; border-bottom: 1px dashed var(--accent-color);">Dénombrement
+                    des Colliers Généraux</a>
+            </div>
+        </footer>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

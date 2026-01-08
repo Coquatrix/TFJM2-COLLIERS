@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Démonstration : Dénombrement des Colliers Binaires</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        .proof-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            background: rgba(15, 23, 42, 0.85);
+            /* Slightly more opaque for reading */
+            min-height: 100vh;
+        }
+
+        .proof-section {
+            margin-bottom: 3rem;
+        }
+
+        h2 {
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        h3 {
+            color: var(--accent-color);
+            margin-top: 1.5rem;
+        }
+
+        .theorem {
+            background: rgba(56, 189, 248, 0.1);
+            border-left: 4px solid var(--accent-color);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .qed {
+            text-align: right;
+            font-style: italic;
+            color: var(--text-secondary);
+        }
+
+        a.back-link {
+            display: inline-block;
+            margin-bottom: 2rem;
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        a.back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="background-globes">
+        <div class="globe"></div>
+        <div class="globe"></div>
+        <div class="globe"></div>
+    </div>
+
+    <div class="proof-container display-font">
+        <a href="index.html" class="back-link">← Retour au Générateur</a>
+
+        <header>
+            <h1>Dénombrement des Colliers Binaires (lemme de Burnside)</h1>
+            <p class="subtitle">Démonstration Rigoureuse sous Contraintes</p>
+        </header>
+
+        <div class="proof-section">
+            <h2>1. Définitions et Problème</h2>
+            <p>
+                Soit \( l \) la longueur du collier (nombre de perles), \( p \) son "prix" (nombre de perles de valeur
+                1, les autres étant 0), et \( m \) le nombre maximum de perles 0 consécutives autorisées.
+            </p>
+            <p>
+                On cherche à déterminer \( B(l, p, m) \), le nombre de colliers distincts à une rotation près
+                satisfaisant ces conditions.
+            </p>
+            <p>
+                Dans la suite, nous noterons \( \phi(n) \) la <strong>fonction indicatrice d'Euler</strong>, qui compte
+                le nombre d'entiers positifs inférieurs ou égaux à \( n \) qui sont premiers avec \( n \).
+            </p>
+        </div>
+
+        <div class="proof-section">
+            <h2>2. Action de Groupe et Lemme de Burnside</h2>
+            <p>
+                L'ensemble des colliers correspond à l'ensemble des orbites des séquences linéaires de longueur \( l \)
+                sous l'action du groupe cyclique \( C_l \).
+                D'après le <strong>Lemme de Burnside</strong> (ou formule de Cauchy-Frobenius), le nombre d'orbites est
+                donné par :
+            </p>
+            <div class="theorem">
+                \[ B(l, p, m) = \frac{1}{|C_l|} \sum_{g \in C_l} |X^g| = \frac{1}{l} \sum_{k=1}^{l} |X^{\rho^k}| \]
+            </div>
+            <p>
+                Où \( X \) est l'ensemble des séquences linéaires valides (longueur \( l \), poids \( p \), max \( m \)
+                zéros consécutifs circulaires), et \( X^{\rho^k} \) est l'ensemble des séquences fixes par une rotation
+                de \( k \).
+            </p>
+        </div>
+
+        <div class="proof-section">
+            <h2>3. Analyse des Points Fixes</h2>
+            <p>
+                Une séquence est invariante par une rotation \( k \) si et seulement si elle est périodique de période
+                \( d = \gcd(l, k) \).
+                Une telle séquence est entièrement déterminée par ses \( d \) premiers termes, qui sont répétés \( l/d
+                \) fois.
+            </p>
+            <p>
+                Pour que cette séquence appartienne à \( X \) (poids \( p \)), il faut que le motif répété contienne
+                exactement \( p' = p / (l/d) \) perles de valeur 1. Cela implique une condition nécessaire :
+                \[ \frac{l}{d} \mid p \iff \frac{l}{\gcd(l, k)} \mid p \]
+            </p>
+            <p>
+                Soit \( \kappa = l / \gcd(l,k) \) le nombre de répétitions du motif. La condition devient \( \kappa \mid
+                \gcd(l, p) \).
+                En regroupant les termes selon les diviseurs, on peut réécrire la somme sur les diviseurs de \( D =
+                \gcd(l, p) \).
+            </p>
+            <p>
+                Le nombre de séquences valides de période \( d = l/\kappa \) est égal au nombre de séquences linéaires
+                de longueur \( d \) avec \( p/\kappa \) uns, telles que les contraintes de zéros consécutifs (y compris
+                au bord circulaire) soient respectées. Notons ce nombre \( N_{lin}(d, p/\kappa, m) \).
+            </p>
+            <p>
+                En réalité, une bijection classique montre que ce nombre est lié au nombre de solutions entières d'une
+                équation de "gaps" (intervalles de zéros).
+                Si on a \( w \) perles 1 sur un cercle de taille \( d \), il y a \( w \) intervalles de zéros \( x_1,
+                \dots, x_w \) tels que :
+                \[ \sum_{i=1}^w x_i = d - w \quad \text{et} \quad 0 \le x_i \le m \]
+                Le nombre de séquences linéaires valides associées est donné par \( \frac{d}{w} \times (\text{nombre de
+                solutions}) \).
+            </p>
+            <p>
+                Le nombre de solutions est le coefficient de \( x^{d-w} \) dans le développement de \( (1 + x + \dots +
+                x^m)^w \).
+                Appelons ce coefficient \( C(w, z, m) = [x^z] (\sum_{j=0}^m x^j)^w \).
+                Alors \( |X^{\rho^k}| = \frac{d}{w} C(w, d-w, m) \) avec \( d=l/\kappa, w=p/\kappa \).
+            </p>
+        </div>
+
+        <div class="proof-section">
+            <h2>4. Formule Générale</h2>
+            <p>
+                En substituant dans Burnside et en simplifiant, nous faisons intervenir \( \phi(\kappa) \),
+                <strong>l'indicatrice d'Euler</strong>.
+                Elle est définie comme le nombre d'entiers naturels strictement positifs inférieurs ou égaux à \( \kappa
+                \) et qui sont premiers avec \( \kappa \).
+            </p>
+            <p>
+                La formule devient alors :
+                \[ B(l, p, m) = \frac{1}{l} \sum_{\kappa \mid \gcd(l, p)} \phi(\kappa) \cdot \frac{l/\kappa}{p/\kappa}
+                \cdot [x^{(l-p)/\kappa}] \left( \frac{1-x^{m+1}}{1-x} \right)^{p/\kappa} \]
+                \[ B(l, p, m) = \frac{1}{p} \sum_{\kappa \mid \gcd(l, p)} \phi(\kappa) \cdot
+                \text{Coeff}_{\frac{l-p}{\kappa}} \left( (1 + x + \dots + x^m)^{p/\kappa} \right) \]
+            </p>
+            <p>
+                Le coefficient peut être calculé explicitement :
+                \[ K_{\kappa} = [x^{Z}] \left( \frac{1-x^{m+1}}{1-x} \right)^{W} = \sum_{j=0}^{W} (-1)^j \binom{W}{j}
+                \binom{Z - j(m+1) + W - 1}{W - 1} \]
+                avec \( Z = (l-p)/\kappa \) et \( W = p/\kappa \).
+            </p>
+        </div>
+
+        <div class="proof-section">
+            <h2>5. Analyse par Cas selon \( d = \gcd(l, p) \)</h2>
+
+            <h3>Cas A : \( d = 1 \) (Premiers entre eux)</h3>
+            <p>
+                Si \( \gcd(l, p) = 1 \), alors la seule valeur possible pour \( \kappa \) est 1. La somme contient un
+                unique terme.
+            </p>
+            <div class="theorem">
+                \[ B(l, p, m) = \frac{1}{p} \sum_{j=0}^{p} (-1)^j \binom{p}{j} \binom{l-p - j(m+1) + p - 1}{p - 1} \]
+                Ce qui se simplifie en :
+                \[ B(l, p, m) = \frac{1}{p} \sum_{j=0}^{\lfloor \frac{l-p}{m+1} \rfloor} (-1)^j \binom{p}{j} \binom{l -
+                j(m+1) - 1}{p - 1} \]
+            </div>
+
+            <h3>Cas B : \( d \) est un nombre premier</h3>
+            <p>
+                Les diviseurs de \( d = \gcd(l, p) \) sont \( 1 \) et \( d \). La somme contient donc deux termes : pour
+                \( \kappa=1 \) (qui donne le terme \( K_1 \)) et pour \( \kappa=d \) (qui donne le terme \( K_d \),
+                apparaissant \( \phi(d) = d-1 \) fois).
+            </p>
+            <p>
+                La formule est donc :
+                \[ B(l, p, m) = \frac{1}{p} \left( K_1 + (d-1) K_d \right) \]
+            </p>
+            <p>
+                Avec les calculs explicites suivants :
+            </p>
+            <div class="theorem">
+                \[ K_1 = \sum_{j=0}^{\lfloor \frac{l-p}{m+1} \rfloor} (-1)^j \binom{p}{j} \binom{l - j(m+1) - 1}{p - 1}
+                \]
+                \[ K_d = \sum_{j=0}^{\lfloor \frac{(l-p)/d}{m+1} \rfloor} (-1)^j \binom{p/d}{j} \binom{l/d - j(m+1) -
+                1}{p/d - 1} \]
+            </div>
+
+            <h3>Cas C : \( d \) quelconque</h3>
+            <p>
+                On doit sommer sur tous les diviseurs de \( d \).
+            </p>
+            <div class="theorem">
+                \[ B(l, p, m) = \frac{1}{p} \sum_{\kappa \mid \gcd(l, p)} \phi(\kappa) \sum_{j=0}^{\lfloor
+                \frac{Z_\kappa}{m+1} \rfloor} (-1)^j \binom{W_\kappa}{j} \binom{l/\kappa - j(m+1) - 1}{W_\kappa - 1} \]
+                Avec \( W_\kappa = p/\kappa \) et \( Z_\kappa = (l-p)/\kappa \).
+            </div>
+
+            <p class="qed">C.Q.F.D.</p>
+        </div>
+    </div>
+</body>
+
+</html>

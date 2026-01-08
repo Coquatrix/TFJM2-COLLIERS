@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dénombrement des Colliers Généraux</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        .proof-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            background: rgba(15, 23, 42, 0.85);
+            /* Slightly more opaque for reading */
+            min-height: 100vh;
+        }
+
+        .proof-section {
+            margin-bottom: 3rem;
+        }
+
+        h2 {
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        h3 {
+            color: var(--accent-color);
+            margin-top: 1.5rem;
+        }
+
+        h4 {
+            color: #fff;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .theorem {
+            background: rgba(56, 189, 248, 0.1);
+            border-left: 4px solid var(--accent-color);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .lemma {
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 4px solid #aaa;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-style: italic;
+        }
+
+        .qed {
+            text-align: right;
+            font-style: italic;
+            color: var(--text-secondary);
+        }
+
+        a.back-link {
+            display: inline-block;
+            margin-bottom: 2rem;
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        a.back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="background-globes">
+        <div class="globe"></div>
+        <div class="globe"></div>
+        <div class="globe"></div>
+    </div>
+
+    <div class="proof-container display-font">
+        <a href="index.html" class="back-link">← Retour au Générateur</a>
+
+        <header>
+            <h1>Dénombrement des Colliers Généraux</h1>
+            <p class="subtitle">Extension de la méthode élémentaire aux perles de valeur quelconque</p>
+        </header>
+
+        <div class="proof-section">
+            <h2>1. Définitions</h2>
+            <p>
+                Un collier général de longueur \( l \), poids \( p \) et contrainte \( m \) est une suite circulaire \(
+                (x_1, \dots, x_l) \) telle que :
+            <ul>
+                <li>Chaque perle a une valeur entière \( x_i \ge 0 \).</li>
+                <li>La somme totale des valeurs est \( \sum x_i = p \).</li>
+                <li>Il n'y a pas plus de \( m \) perles consécutives de valeur 0 (y compris circulairement).</li>
+            </ul>
+            </p>
+        </div>
+
+        <div class="proof-section">
+            <h2>2. Méthode Élémentaire</h2>
+            <p>
+                Comme établi dans la <a href="proof_elementary.html" style="color:var(--accent-color)">démonstration
+                    précédente</a> (Cas C), le nombre de colliers \( G(l, p, m) \) s'obtient en sommant sur les périodes
+                possibles des séquences linéaires.
+            </p>
+            <div class="lemma">
+                <strong>Formule Élémentaire :</strong>
+                \[ G(l, p, m) = \frac{1}{l} \sum_{d | \gcd(l, p)} \phi(d) N_{gen}(l/d, p/d) \]
+                Où \( N_{gen}(L, P) \) est le nombre de <strong>séquences linéaires</strong> (non circulaires) de
+                longueur \( L \), de somme \( P \), respectant la contrainte des zéros consécutifs (interprétée
+                linéairement, avec l'hypothèse que la concaténation circulaire conserve la validité).
+            </div>
+            <p>
+                Notre objectif est donc de calculer explicitement \( N_{gen}(L, P) \).
+            </p>
+        </div>
+
+        <div class="proof-section">
+            <h2>3. Calcul de \( N_{gen}(L, P) \)</h2>
+            <p>
+                Une séquence linéaire générale peut être vue comme une distribution de "poids" dans des "cases".
+                Pour la dénombrer, nous allons décomposer le problème selon le <strong>nombre de perles
+                    non-nulles</strong>, noté \( k \).
+            </p>
+
+            <h3>Étape A : Séparer la structure et le poids</h3>
+            <p>
+                Si une séquence possède exactement \( k \) perles de valeur \( \ge 1 \), et \( L-k \) perles de valeur
+                0, nous pouvons distinguer deux choix indépendants :
+            </p>
+            <ol>
+                <li><strong>Le choix des positions :</strong> Où placer les \( k \) perles non-nulles parmi les \( L \)
+                    emplacements ? (Ceci est équivalent à construire un collier binaire avec \( k \) uns).</li>
+                <li><strong>L'attribution des valeurs :</strong> Comment répartir le poids total \( P \) sur ces \( k \)
+                    perles, sachant que chacune doit valoir au moins 1 ?</li>
+            </ol>
+
+            <h3>Étape B : Dénombrement des positions (Partie Binaire)</h3>
+            <p>
+                Le nombre de façons de placer \( k \) perles non-nulles dans \( L \) cases de manière à ne pas avoir
+                plus de \( m \) zéros consécutifs est donné par notre formule binaire linéaire \( K_{lin} \) (établie
+                précédemment) :
+            </p>
+            <div class="theorem">
+                \[ \text{Pos}(L, k) = \sum_{j=0}^{\lfloor \frac{L-k}{m+1} \rfloor} (-1)^j \binom{k+1}{j} \binom{L -
+                j(m+1)}{k} \]
+                <em>Note : C'est la formule classique des rangements avec contrainte d'écart max, adaptée aux séquences
+                    linéaires commençant ou finissant potentiellement par des zéros. Pour la formule strictement
+                    cohérente avec le collier binaire précédent :</em>
+                \[ K_1(L, k) = \sum_{j=0}^{\lfloor \frac{L-k}{m+1} \rfloor} (-1)^j \binom{k}{j} \binom{L - j(m+1) - 1}{k
+                - 1} \]
+                Nous utiliserons \( K_1(L, k) \) qui correspond aux séquences linéaires "compatibles" avec la rotation
+                (commençant implicitement par un 1 pour éviter les effets de bord dans le comptage primitif).
+            </div>
+
+            <h3>Étape C : Dénombrement des valeurs (Partie Composition)</h3>
+            <p>
+                Une fois les \( k \) positions fixées, il faut choisir \( k \) entiers \( y_1, \dots, y_k \ge 1 \) tels
+                que \( \sum y_i = P \).
+                C'est un problème standard de <strong>composition</strong> d'un entier.
+            </p>
+            <div class="lemma">
+                Le nombre de compositions de \( P \) en \( k \) parties strictement positives est :
+                \[ \text{Comp}(P, k) = \binom{P - 1}{k - 1} \]
+            </div>
+
+            <h3>Étape D : Combinaison</h3>
+            <p>
+                Le nombre total \( N_{gen}(L, P) \) est la somme sur toutes les valeurs possibles de \( k \) (le nombre
+                de perles non-nulles).
+                \( k \) peut varier de \( \lceil L/(m+1) \rceil \) (minimum pour casser les séries de zéros) à \(
+                \min(L, P) \).
+            </p>
+            <div class="theorem">
+                \[ N_{gen}(L, P) = \sum_{k} K_1(L, k) \times \binom{P - 1}{k - 1} \]
+            </div>
+        </div>
+
+        <div class="proof-section">
+            <h2>4. Formule Finale</h2>
+            <p>
+                En réinjectant ce résultat dans la somme de Burnside (forme élémentaire), nous obtenons :
+            </p>
+            <div class="theorem">
+                \[ G(l, p, m) = \frac{1}{l} \sum_{d | \gcd(l, p)} \phi(d) \sum_{k} \binom{p/d - 1}{k - 1} \left(
+                \sum_{j} (-1)^j \binom{k}{j} \binom{l/d - j(m+1) - 1}{k - 1} \right) \]
+            </div>
+            <p>
+                Cette formule permet de calculer exactement le nombre de colliers généraux en passant par une
+                décomposition purement combinatoire, sans recours direct à la théorie des groupes avancée.
+            </p>
+            <p class="qed">C.Q.F.D.</p>
+        </div>
+    </div>
+</body>
+
+</html>

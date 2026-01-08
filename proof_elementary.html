@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Démonstration Élémentaire : Dénombrement des Colliers</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        .proof-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            background: rgba(15, 23, 42, 0.85);
+            /* Slightly more opaque for reading */
+            min-height: 100vh;
+        }
+
+        .proof-section {
+            margin-bottom: 3rem;
+        }
+
+        h2 {
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        h3 {
+            color: var(--accent-color);
+            margin-top: 1.5rem;
+        }
+
+        .theorem {
+            background: rgba(56, 189, 248, 0.1);
+            border-left: 4px solid var(--accent-color);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .lemma {
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 4px solid #aaa;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-style: italic;
+        }
+
+        .qed {
+            text-align: right;
+            font-style: italic;
+            color: var(--text-secondary);
+        }
+
+        a.back-link {
+            display: inline-block;
+            margin-bottom: 2rem;
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        a.back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="background-globes">
+        <div class="globe"></div>
+        <div class="globe"></div>
+        <div class="globe"></div>
+    </div>
+
+    <div class="proof-container display-font">
+        <a href="index.html" class="back-link">← Retour au Générateur</a>
+
+        <header>
+            <h1>Dénombrement Élémentaire des Colliers</h1>
+            <p class="subtitle">Approche par les Périodes Fondamentales (sans Lemme de Burnside)</p>
+        </header>
+
+        <div class="proof-section">
+            <h2>1. Définitions et Approche</h2>
+            <p>
+                Nous cherchons à dénombrer les colliers de longueur \( l \), de poids \( p \), respectant la contrainte
+                \( m \).
+                Plutôt que d'utiliser la théorie des groupes, nous allons adopter une approche constructive basée sur la
+                <strong>périodicité</strong> des séquences.
+            </p>
+            <p>
+                Soit \( S \) l'ensemble des séquences linéaires de longueur \( l \) satisfaisant les contraintes.
+                Pour toute séquence \( s \in S \), on définit sa <strong>période fondamentale</strong> \( T(s) \) comme
+                le plus petit entier \( k \ge 1 \) tel que la séquence soit constituée de la répétition d'un motif de
+                longueur \( k \).
+            </p>
+            <div class="lemma">
+                <strong>Propriété :</strong> La période fondamentale \( k \) doit nécessairement diviser la longueur
+                totale \( l \). De plus, pour respecter le poids total \( p \), le motif répété doit contenir exactement
+                \( p \times \frac{k}{l} \) uns.
+            </div>
+            <p>
+                Un collier correspond à une classe d'équivalence de séquences par rotation. Si une séquence a pour
+                période fondamentale \( k \), son orbite (l'ensemble des rotations distinctes) contient exactement \( k
+                \) séquences distinctes.
+            </p>
+            <p>
+                La stratégie est donc la suivante :
+            <ol>
+                <li>Identifier les périodes possibles (diviseurs communs de \( l \) et \( p \)).</li>
+                <li>Compter le nombre de séquences <em>primitives</em> (de période fondamentale exactement \( k \)) pour
+                    chaque diviseur.</li>
+                <li>Diviser par la taille de l'orbite (\( k \)) pour obtenir le nombre de colliers.</li>
+            </ol>
+            </p>
+        </div>
+
+        <div class="proof-section">
+            <h2>2. Analyse par Cas selon \( d = \gcd(l, p) \)</h2>
+
+            <h3>Cas A : \( d = 1 \) (Premiers entre eux)</h3>
+            <p>
+                Si \( \gcd(l, p) = 1 \), le seul diviseur commun est 1. La seule période possible qui divise à la fois
+                \( l \) et permet d'obtenir un poids entier \( p \) est \( l \) lui-même (car si la période était \( k <
+                    l \), le poids serait \( (l/k) \times \text{poids du motif} \), donc \( l/k \) diviserait \( p \),
+                    ce qui est impossible car \(\gcd(l,p)=1\)). </p>
+                    <p>
+                        Ainsi, <strong>toutes</strong> les séquences linéaires valides sont primitives (période \( l
+                        \)).
+                        Chaque collier est formé de \( l \) séquences linéaires distinctes.
+                    </p>
+                    <div class="theorem">
+                        Soit \( K_1 \) le nombre total de séquences linéaires valides (qui est le même que le \( N_{lin}
+                        \) calculé précédemment).
+                        \[ B(l, p, m) = \frac{K_1}{l} \]
+                        Avec le calcul explicite de \( K_1 \) :
+                        \[ K_1 = \sum_{j=0}^{\lfloor \frac{l-p}{m+1} \rfloor} (-1)^j \binom{p}{j} \binom{l - j(m+1) -
+                        1}{p - 1} \]
+                    </div>
+
+                    <h3>Cas B : \( d \) est un nombre premier</h3>
+                    <p>
+                        Ici, \( \gcd(l, p) = d \). Les diviseurs communs sont \( 1 \) et \( d \).
+                        Cela implique deux types de périodes possibles pour les séquences :
+                    <ul>
+                        <li><strong>Période \( l \)</strong> : Motif répété 1 fois. (Correspond au diviseur 1 du pgcd).
+                        </li>
+                        <li><strong>Période \( l/d \)</strong> : Motif répété \( d \) fois. (Correspond au diviseur \( d
+                            \) du pgcd).</li>
+                    </ul>
+            </p>
+            <p>
+                Notons \( K_1 \) le nombre total de séquences linéaires de longueur \( l \) et poids \( p \).
+                Notons \( K_d \) le nombre de séquences linéaires de longueur \( l/d \) et poids \( p/d \).
+            </p>
+            <p>
+                Les séquences de période \( l/d \) sont formées en répétant \( d \) fois une séquence de longueur \( l/d
+                \). Il y en a exactement \( K_d \).
+                Ces séquences ne sont PAS primitives de longueur \( l \), mais de longueur \( l/d \).
+            </p>
+            <p>
+                Les séquences primitives de période \( l \) sont donc toutes les autres : \( N_{prim}(l) = K_1 - K_d \).
+            </p>
+            <p>
+                On compte maintenant les colliers :
+            <ul>
+                <li>Colliers de taille \( l \) : Ils proviennent des \( K_1 - K_d \) séquences primitives. On divise par
+                    \( l \).</li>
+                <li>Colliers de taille \( l/d \) : Ils proviennent des \( K_d \) séquences de période \( l/d \). Comme
+                    \( \gcd(l/d, p/d) = 1 \) (car \( d \) est premier et maximal), ces séquences sont primitives à leur
+                    niveau. On divise par leur taille d'orbite \( l/d \).</li>
+            </ul>
+            </p>
+            <div class="theorem">
+                \[ B(l, p, m) = \frac{K_1 - K_d}{l} + \frac{K_d}{l/d} \]
+                En mettant au même dénominateur :
+                \[ B(l, p, m) = \frac{K_1 - K_d + d K_d}{l} = \frac{K_1 + (d-1) K_d}{l} \]
+                Où les termes \( K_1 \) et \( K_d \) sont calculés explicitement par :
+                \[ K_1 = \sum_{j=0}^{\lfloor \frac{l-p}{m+1} \rfloor} (-1)^j \binom{p}{j} \binom{l - j(m+1) - 1}{p - 1}
+                \]
+                \[ K_d = \sum_{j=0}^{\lfloor \frac{(l-p)/d}{m+1} \rfloor} (-1)^j \binom{p/d}{j} \binom{l/d - j(m+1) -
+                1}{p/d - 1} \]
+            </div>
+
+            <h3>Cas C : \( d \) quelconque</h3>
+            <p>
+                De manière générale, toute séquence linéaire appartient à une période fondamentale \( T = l/\kappa \) où
+                \( \kappa \) est un diviseur de \( d = \gcd(l, p) \).
+            </p>
+            <p>
+                Soit \( Prim(T) \) le nombre de séquences linéaires de longueur \( T \) et poids proportionnel qui sont
+                primitives (ne se réduisent pas à une sous-période).
+                Le nombre de colliers est la somme sur toutes les périodes possibles :
+                \[ B(l, p, m) = \sum_{\kappa | d} \frac{Prim(l/\kappa)}{l/\kappa} \]
+            </p>
+            <p>
+                Or, le nombre total de séquences \( K_\kappa \) (correspondant à une répétition \( \kappa \) fois d'un
+                motif) inclut les séquences dont la période fondamentale est un diviseur strict de \( l/\kappa \).
+                Pour obtenir le nombre de séquences <strong>primitives</strong> \( Prim(l/\kappa) \), il faut retirer
+                ces contributions.
+                En appliquant le principe d'inclusion-exclusion sur les diviseurs de \( l/\kappa \) (plus précisément
+                sur les diviseurs de \( d/\kappa \) puisque la contrainte de poids impose la divisibilité par \( d \)),
+                on obtient l'expression explicite suivante :
+
+                \[ Prim(l/\kappa) = \sum_{r | (d/\kappa)} \mu(r) K_{\kappa r} \]
+
+                Où \( \mu(r) \) est une fonction valant :
+            <ul>
+                <li>\( 1 \) si \( r = 1 \)</li>
+                <li>\( (-1)^k \) si \( r \) est le produit de \( k \) nombres premiers distincts</li>
+                <li>\( 0 \) si \( r \) a un facteur carré (divisible par un carré parfait > 1)</li>
+            </ul>
+            Et \( K_{\kappa r} \) est le nombre de séquences linéaires formées par la répétition \( \kappa r \) fois
+            d'un motif de longueur \( l/(\kappa r) \), donné par :
+            \[ K_{\kappa r} = \sum_{j=0}^{\lfloor \frac{L'-P'}{m+1} \rfloor} (-1)^j \binom{P'}{j} \binom{L' - j(m+1) -
+            1}{P' - 1} \]
+            avec \( L' = \frac{l}{\kappa r} \) et \( P' = \frac{p}{\kappa r} \).
+            </p>
+            <p>
+                Au final, on retombe sur une somme pondérée qui est équivalente à celle de Burnside :
+            </p>
+            <div class="theorem">
+                \[ B(l, p, m) = \frac{1}{l} \sum_{\kappa | d} \phi(\kappa) K_\kappa \]
+            </div>
+            <p>
+                L'interprétation est que le terme \( \phi(\kappa) \) "compense" les multiples comptages lors des
+                inclusions des périodes.
+            </p>
+
+            <p class="qed">Le résultat est identique, mais obtenu par décomposition des orbites plutôt que par la
+                moyenne des points fixes.</p>
+        </div>
+    </div>
+</body>
+
+</html>
